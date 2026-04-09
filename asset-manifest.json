@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/nss-frontend/static/css/main.1a23a1cc.css",
+    "main.js": "/nss-frontend/static/js/main.2eeb0d06.js",
+    "index.html": "/nss-frontend/index.html",
+    "main.1a23a1cc.css.map": "/nss-frontend/static/css/main.1a23a1cc.css.map",
+    "main.2eeb0d06.js.map": "/nss-frontend/static/js/main.2eeb0d06.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1a23a1cc.css",
+    "static/js/main.2eeb0d06.js"
+  ]
+}
