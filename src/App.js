@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -33,43 +33,47 @@ function App() {
         <nav className="flex justify-between items-center px-8 py-4 
 bg-white/30 backdrop-blur-xl shadow-lg border-b border-white/20 sticky top-0 z-50">
 
-  <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
-    Neighbourhood Skill Sharing
-  </h1>
+          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+            Neighbourhood Skill Sharing
+          </h1>
 
-  <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4">
 
-    <Link to="/dashboard">
-      <button className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:scale-105 transition">
-        Dashboard
-      </button>
-    </Link>
+            <Link to="/dashboard">
+              <button className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:scale-105 transition">
+                Dashboard
+              </button>
+            </Link>
 
-    <Link to="/skills">
-      <button className="px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-105 transition">
-        Skills
-      </button>
-    </Link>
+            <Link to="/skills">
+              <button className="px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-105 transition">
+                Skills
+              </button>
+            </Link>
 
-    <Link to="/login">
-      <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded-full hover:bg-blue-50">
-        Login
-      </button>
-    </Link>
+            <Link to="/login">
+              <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded-full hover:bg-blue-50">
+                Login
+              </button>
+            </Link>
 
-    <Link to="/register">
-      <button className="px-4 py-2 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-full hover:scale-105 transition">
-        Register
-      </button>
-    </Link>
+            <Link to="/register">
+              <button className="px-4 py-2 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-full hover:scale-105 transition">
+                Register
+              </button>
+            </Link>
 
-  </div>
-</nav>
+          </div>
+        </nav>
 
         {/* Page Content */}
         <div className="p-8">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/nss-frontend" element={<Navigate to="/dashboard" />} />
+
+            {/* ✅ FIX: Redirect to Dashboard */}
+            <Route path="/" element={<Navigate to="/dashboard" />} />
+
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -78,6 +82,7 @@ bg-white/30 backdrop-blur-xl shadow-lg border-b border-white/20 sticky top-0 z-5
             <Route path="/exchange" element={<Exchange />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/review" element={<Review />} />
+
           </Routes>
         </div>
 

@@ -1,15 +1,24 @@
 import { NavLink } from "react-router-dom";
 import { FaHome, FaTools, FaUser, FaUserPlus } from "react-icons/fa";
 
+
 function Sidebar() {
   return (
-    <div className="w-64 h-screen fixed top-0 left-0 
-    bg-white/30 backdrop-blur-xl shadow-2xl border-r border-white/20 p-6
-    transition-all duration-300">
+    <div
+      className="w-64 h-screen fixed top-0 left-0 
+      bg-white/30 backdrop-blur-xl shadow-2xl border-r border-white/20 p-6
+      transition-all duration-300 flex flex-col"
+    >
 
-      
+      {/* ✅ LOGO SECTION */}
+      <div className="flex flex-col items-center mb-8">
+        
+        <h1 className="text-sm font-bold text-gray-800 mt-3 text-center leading-tight">
+          Neighbourhood <br /> Skill Sharing
+        </h1>
+      </div>
 
-      {/* Menu */}
+      {/* ✅ MENU */}
       <div className="flex flex-col gap-3">
 
         {/* Dashboard */}
