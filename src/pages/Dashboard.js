@@ -1,94 +1,134 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import API from "../api/axios";
 
 function Dashboard() {
-  const navigate = useNavigate();
+  const [sessions, setSessions] = useState([]);
+  const recentSessions = sessions.slice(0, 3);
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchSessions = async () => {
+    try {
+      const res = await API.get("/sessions/my");
+      setSessions(res.data.sessions);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSessions();
+  }, []);
+
+  if (loading) {
+    return <p className="text-center mt-10">Loading sessions...</p>;
+  }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="bg-[var(--bg)] text-[var(--text)]"> {/* 🔥 ADDED */}
 
-      {/* Stats Section */}
-      <div className="grid md:grid-cols-3 gap-6 mb-8">
-
-        <div className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl shadow-xl">
-          <h3 className="text-lg font-semibold text-gray-700">
-            Total Credits
-          </h3>
-          <p className="text-3xl font-bold mt-2 text-indigo-600">
-            260
-          </p>
-        </div>
-
-        <div className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl shadow-xl">
-          <h3 className="text-lg font-semibold text-gray-700">
-            Current Streak
-          </h3>
-          <p className="text-3xl font-bold mt-2 text-purple-600">
-            12 days
-          </p>
-        </div>
-
-        <div className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl shadow-xl">
-          <h3 className="text-lg font-semibold text-gray-700">
-            Reputation
-          </h3>
-          <p className="text-3xl font-bold mt-2 text-blue-600">
-            92/100
-          </p>
-        </div>
-
-      </div>
-
-      {/* Quick Actions */}
-      <div className="bg-white/40 backdrop-blur-xl p-6 rounded-2xl shadow-xl">
+      {/* DASHBOARD STATS */}
+      <div className="grid grid-cols-3 gap-6 mb-6">
         
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">
-          Quick Actions
-        </h3>
+        
+        <div className="card p-5 rounded-xl shadow">
+          <h2>Total Credits</h2>
+          <p className="text-2xl font-bold text-blue-500">260</p>
+        </div>
 
-        <div className="grid md:grid-cols-3 gap-4">
+     
+        <div className="card p-5 rounded-xl shadow">
+          <h2>Current Streak</h2>
+          <p className="text-2xl font-bold text-purple-500">12 days</p>
+        </div>
 
-          {/* Update Profile → Skills */}
-          <div
-            onClick={() => navigate("/skills")}
-            className="bg-white/50 p-4 rounded-xl shadow hover:scale-105 transition cursor-pointer"
-          >
-            <h4 className="font-semibold text-gray-700">
-              Update Profile
-            </h4>
-            <p className="text-sm text-gray-500">
-              Edit your skills and video
-            </p>
-          </div>
+       
+        <div className="card p-5 rounded-xl shadow">
+          <h2>Reputation</h2>
+          <p className="text-2xl font-bold text-blue-600">92/100</p>
+        </div>
 
-          {/* Find Nearby → Nearby */}
-          <div
-            onClick={() => navigate("/nearby")}
-            className="bg-white/50 p-4 rounded-xl shadow hover:scale-105 transition cursor-pointer"
-          >
-            <h4 className="font-semibold text-gray-700">
-              Find Nearby
-            </h4>
-            <p className="text-sm text-gray-500">
-              Locate nearest mentors/learners
-            </p>
-          </div>
+      </div>
 
-          {/* Book Session → Schedule */}
-          <div
-            onClick={() => navigate("/schedule")}
-            className="bg-white/50 p-4 rounded-xl shadow hover:scale-105 transition cursor-pointer"
-          >
-            <h4 className="font-semibold text-gray-700">
-              Book Session
-            </h4>
-            <p className="text-sm text-gray-500">
-              Choose time slots
-            </p>
-          </div>
+      
+      <div className="card p-6 rounded-xl shadow mb-6">
+        <h2 className="mb-4 font-semibold">Quick Actions</h2>
+
+        <div className="grid grid-cols-3 gap-4">
+
+         
+          <div className="p-4 bg-[var(--border)] rounded-lg">Update Profile</div>
+
+          
+          <div className="p-4 bg-[var(--border)] rounded-lg">Find Nearby</div>
+
+       
+          <div className="p-4 bg-[var(--border)] rounded-lg">Book Session</div>
 
         </div>
       </div>
 
+      {/* MY SESSIONS */}
+      <div>
+        <h2 className="text-2xl font-bold mb-4 text-blue-600">My Sessions</h2>
+
+        {sessions.length > 0 ? (
+          <div className="grid grid-cols-3 gap-6">
+            {recentSessions.map(session => (
+              <div
+                key={session._id}
+                className="card p-5 rounded-xl shadow hover:shadow-lg transition" // 🔥 CHANGE
+              >
+                <h3 className="font-bold text-lg">
+                  {session.skill?.skillName || "No Skill"}
+                </h3>
+
+                
+                <p className="text-sm text-[var(--text)] opacity-70">
+                  Mentor: {session.mentor?.username || "Unknown"}
+                </p>
+
+                <p className="mt-2 text-sm">
+                  📅 {session.date ? new Date(session.date).toLocaleDateString() : "No Date"}
+                </p>
+
+                <p className="text-sm">⏰ {session.time || "No Time"}</p>
+
+                <p
+                  className={`mt-2 text-sm font-semibold 
+                  ${
+                    session.status === "Pending"
+                      ? "text-yellow-500"
+                      : session.status === "Accepted"
+                        ? "text-green-500"
+                        : session.status === "Completed"
+                          ? "text-blue-500"
+                          : "text-gray-500"
+                  }`}
+                >
+                  Status: {session.status}
+                </p>
+
+              </div>
+            ))}
+          </div>
+        ) : (
+          
+          <div className="card p-6 rounded-xl shadow text-center opacity-70">
+            No sessions booked yet 🚀
+          </div>
+        )}
+      </div>
+
+      {/* REVIEW MODAL */}
+      {selectedSession && (
+        <ReviewModal
+          session={selectedSession}
+          onClose={() => setSelectedSession(null)}
+        />
+      )}
     </div>
   );
 }
